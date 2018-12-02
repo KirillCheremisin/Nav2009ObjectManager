@@ -10,12 +10,16 @@ This set of files provides you with a possibility to export/import your NAV 2009
     You can find needed files at http://gnuwin32.sourceforge.net/packages/libiconv.htm.
     Your folder should look like
     ../iconv/
+
         /iconv.exe
+    
         /libcharset1.dll
+    
         /libiconv2.dll
+    
         /libintl3.dll
 3. Align objects IDs with your database IDs, compile objects;
-4. Run FOR50000;
+4. Run the form "Object Manager";
 5. Set values for "App Folder Path" - a path where you store your objects in .txt,
     "FOB Folder Path" (optional) - a path where you store your objects in .fob,
     "Iconv File Path" - a path where the iconv.exe is located,
@@ -36,6 +40,7 @@ When you run "Export", the form will
 3. Run .bat file;
 4. Delete .bat file;
 5. Delete temporary files in cp866.
+
 As a result, you will have utf-8 formatted files.
 
 ## Export as FOB
