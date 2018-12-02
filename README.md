@@ -58,4 +58,4 @@ If you set "Compilations Strategy" = All, then all your files will be imported, 
 1. If your repo has a new file, it will not be imported into your database until you create it manually. It is because the NAV 2009 does not check the folder for files, it filters objects and then checks the folder for the filtered objects.
 2. If you have a compilation error, your objects will not be compiled. You should fix it manually.
 3. If you develop in a remote database in a local client, you set your own path to the folders. Another developer wants to use their own paths. So you should be careful while developing in a shared database.
-4. It doesn't work without iconv.exe files.
+4. It doesn't work without iconv.
