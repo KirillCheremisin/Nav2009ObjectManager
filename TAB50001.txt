@@ -1,0 +1,39 @@
+OBJECT Table 50001 Object Path Buffer
+{
+  OBJECT-PROPERTIES
+  {
+    Date=10/07/18;
+    Time=[ 9:55:30 PM];
+    Modified=Yes;
+    Version List=DEVTOOL;
+  }
+  PROPERTIES
+  {
+  }
+  FIELDS
+  {
+    { 1   ;   ;Entry No.           ;Integer        }
+    { 2   ;   ;Path                ;Text250        }
+    { 3   ;   ;Type and Number     ;Text30         }
+    { 4   ;   ;Encoding            ;Text30         }
+  }
+  KEYS
+  {
+    {    ;Entry No.                               ;Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+
+    PROCEDURE GetPathName@1000000002() : Text[310];
+    BEGIN
+      EXIT(Path + "Type and Number" + Encoding + '.txt');
+    END;
+
+    BEGIN
+    END.
+  }
+}
+

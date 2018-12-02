@@ -1,0 +1,35 @@
+OBJECT Table 50000 Object Manager Setup
+{
+  OBJECT-PROPERTIES
+  {
+    Date=09/06/18;
+    Time=10:06:14 PM;
+    Modified=Yes;
+    Version List=DEVTOOL;
+  }
+  PROPERTIES
+  {
+  }
+  FIELDS
+  {
+    { 1   ;   ;Primary Key         ;Code10         }
+    { 2   ;   ;App Folder Path     ;Text250        }
+    { 3   ;   ;FOB Folder Path     ;Text250        }
+    { 4   ;   ;Iconv File Path     ;Text250        }
+    { 5   ;   ;Compilation Strategy;Option        ;OptionString=Non,Imported,All }
+  }
+  KEYS
+  {
+    {    ;Primary Key                             ;Clustered=Yes }
+  }
+  FIELDGROUPS
+  {
+  }
+  CODE
+  {
+
+    BEGIN
+    END.
+  }
+}
+

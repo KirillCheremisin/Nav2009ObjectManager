@@ -1,0 +1,231 @@
+OBJECT Codeunit 50000 Object Management
+{
+  OBJECT-PROPERTIES
+  {
+    Date=10/07/18;
+    Time=10:09:27 PM;
+    Modified=Yes;
+    Version List=DEVTOOL;
+  }
+  PROPERTIES
+  {
+    OnRun=BEGIN
+          END;
+
+  }
+  CODE
+  {
+
+    PROCEDURE FilterToPermittedRange@1120001004(VAR Object@1120001001 : Record 2000000001);
+    VAR
+      PermissionRange@1120001002 : Record 2000000044;
+    BEGIN
+      WITH Object DO BEGIN
+        CLEARMARKS;
+        PermissionRange.SETFILTER(
+          "Object Type",'<>%1&<>%2',PermissionRange."Object Type"::TableData,PermissionRange."Object Type"::Page);
+        PermissionRange.SETRANGE("Modify Permission",PermissionRange."Modify Permission"::Yes);
+        PermissionRange.FINDSET;
+        REPEAT
+          SETRANGE(Type,PermissionRange."Object Type");
+          SETRANGE(ID,PermissionRange.From,PermissionRange."To");
+          IF FINDSET THEN REPEAT
+            MARK(TRUE);
+          UNTIL NEXT = 0;
+        UNTIL PermissionRange.NEXT = 0;
+        SETRANGE(Type);
+        SETRANGE(ID);
+        MARKEDONLY(TRUE);
+      END;
+    END;
+
+    PROCEDURE ExportTxtByFilter@1120001000(VAR Object@1120001000 : Record 2000000001);
+    VAR
+      Object2@1120001007 : Record 2000000001;
+      ObjectManagerSetup@1000000000 : Record 50000;
+      ObjectPathBuffer@1000000001 : TEMPORARY Record 50001;
+      ObjectPathBufferID@1120001005 : Integer;
+      ExecFile@1120001004 : File;
+      ExecFileName@1120001003 : Text[1024];
+      Ret@1120001002 : Text[30];
+      ObjTypeID@1120001001 : Text[30];
+    BEGIN
+      ObjectManagerSetup.GET;
+      ObjectManagerSetup.TESTFIELD("App Folder Path");
+      ObjectManagerSetup.TESTFIELD("Iconv File Path");
+
+      ExecFileName := ObjectManagerSetup."App Folder Path" + 'conv.bat';
+      IF EXISTS(ExecFileName) THEN
+        ERASE(ExecFileName);
+      ExecFile.WRITEMODE(TRUE);
+      ExecFile.TEXTMODE(TRUE);
+      ExecFile.CREATE(ExecFileName);
+      WITH Object DO BEGIN
+        IF FINDSET THEN REPEAT
+          ObjTypeID := UPPERCASE(COPYSTR(FORMAT(Type),1,3)) + FORMAT(ID);
+          Object2.SETRANGE(Type,Type);
+          Object2.SETRANGE("Company Name","Company Name");
+          Object2.SETRANGE(ID,ID);
+          EXPORTOBJECTS(
+            ObjectManagerSetup."App Folder Path" + ObjTypeID + 'cp866.txt',
+            Object2,0);
+          ExecFile.WRITE('"' + ObjectManagerSetup."Iconv File Path" + '" -f cp866 -t utf-8 "' +
+            ObjectManagerSetup."App Folder Path" + ObjTypeID + 'cp866.txt" > "' +
+            ObjectManagerSetup."App Folder Path" + ObjTypeID + '.txt"');
+          ObjectPathBufferID += 1;
+          ObjectPathBuffer.INIT;
+          ObjectPathBuffer."Entry No." := ObjectPathBufferID;
+          ObjectPathBuffer.Path := ObjectManagerSetup."App Folder Path";
+          ObjectPathBuffer."Type and Number" := ObjTypeID;
+          ObjectPathBuffer.Encoding := 'cp866';
+          ObjectPathBuffer.INSERT;
+        UNTIL NEXT = 0;
+        ExecFile.CLOSE;
+      END;
+
+      Ret := FORMAT(SHELL(ExecFileName));
+      ERASE(ExecFileName);
+      IF ObjectPathBuffer.FINDSET THEN REPEAT
+        ERASE(ObjectPathBuffer.GetPathName);
+      UNTIL ObjectPathBuffer.NEXT = 0;
+    END;
+
+    PROCEDURE ExportFobByFilter@1120001003(VAR Object@1120001001 : Record 2000000001);
+    VAR
+      ObjectManagerSetup@1000000000 : Record 50000;
+      FilePathName@1120001002 : Text[1024];
+    BEGIN
+      ObjectManagerSetup.GET;
+      ObjectManagerSetup.TESTFIELD("FOB Folder Path");
+
+      IF Object.FINDSET THEN REPEAT
+        FilePathName := ObjectManagerSetup."FOB Folder Path" + UPPERCASE(COPYSTR(FORMAT(Object.Type),1,3)) + FORMAT(Object.ID);
+        Object.CALCFIELDS("BLOB Reference");
+        Object."BLOB Reference".EXPORT(FilePathName + '.TXT');
+        RENAME(
+          FilePathName + '.TXT'
+          ,FilePathName + '.FOB');
+      UNTIL Object.NEXT = 0;
+    END;
+
+    PROCEDURE ImportTxtByFilter@1120001001(VAR Object@1120001000 : Record 2000000001);
+    VAR
+      ObjectPathBuffer@1000000001 : TEMPORARY Record 50001;
+      ObjectManagerSetup@1000000000 : Record 50000;
+      ObjectPathBufferID@1000000002 : Integer;
+      ExecFile@1120001005 : File;
+      ExecFileName@1120001004 : Text[1024];
+      Ret@1120001003 : Text[30];
+      ObjTypeID@1120001002 : Text[30];
+    BEGIN
+      ObjectManagerSetup.GET;
+      ObjectManagerSetup.TESTFIELD("App Folder Path");
+      ObjectManagerSetup.TESTFIELD("Iconv File Path");
+      ObjectManagerSetup.TESTFIELD("Compilation Strategy");
+
+      // make .bat file
+      ExecFileName := ObjectManagerSetup."App Folder Path" + 'conv.bat';
+      IF EXISTS(ExecFileName) THEN
+        ERASE(ExecFileName);
+      ExecFile.WRITEMODE(TRUE);
+      ExecFile.TEXTMODE(TRUE);
+      ExecFile.CREATE(ExecFileName);
+      WITH Object DO BEGIN
+        IF FINDSET THEN REPEAT
+          ObjTypeID := UPPERCASE(COPYSTR(FORMAT(Type),1,3)) + FORMAT(ID);
+          ExecFile.WRITE('"' + ObjectManagerSetup."Iconv File Path" + '" -f utf-8 -t cp866 "' +
+            ObjectManagerSetup."App Folder Path" + ObjTypeID + '.txt" > "' +
+            ObjectManagerSetup."App Folder Path" + ObjTypeID + 'utf8.txt"');
+          ObjectPathBufferID += 1;
+          ObjectPathBuffer.INIT;
+          ObjectPathBuffer."Entry No." := ObjectPathBufferID;
+          ObjectPathBuffer.Path := ObjectManagerSetup."App Folder Path";
+          ObjectPathBuffer."Type and Number" := ObjTypeID;
+          ObjectPathBuffer.Encoding := 'utf8';
+          ObjectPathBuffer.INSERT;
+        UNTIL NEXT = 0;
+        ExecFile.CLOSE;
+      END;
+
+      // execute .bat file which creates files in cp866
+      Ret := FORMAT(SHELL(ExecFileName));
+      ERASE(ExecFileName);
+
+      // import from files in cp866
+      // then delete files in cp866
+      IF ObjectPathBuffer.FINDSET THEN REPEAT
+        IMPORTOBJECTS(ObjectPathBuffer.GetPathName);
+        ERASE(ObjectPathBuffer.GetPathName);
+        IF ObjectManagerSetup."Compilation Strategy" = ObjectManagerSetup."Compilation Strategy":: Imported THEN
+          CompileObject(COPYSTR(ObjectPathBuffer."Type and Number",1,3),COPYSTR(ObjectPathBuffer."Type and Number",4));
+      UNTIL ObjectPathBuffer.NEXT = 0;
+
+      IF ObjectManagerSetup."Compilation Strategy" = ObjectManagerSetup."Compilation Strategy"::All THEN
+        CompileAll;
+    END;
+
+    PROCEDURE ImportAllTxt@1120001005();
+    VAR
+      Object@1120001000 : Record 2000000001;
+    BEGIN
+      FilterToPermittedRange(Object);
+      ImportTxtByFilter(Object);
+    END;
+
+    LOCAL PROCEDURE CompileAll@1120001006();
+    VAR
+      WShell@1120001000 : Automation "{F935DC20-1CF0-11D0-ADB9-00C04FD58A0B} 1.0:{72C24DD5-D70A-438B-8A42-98424B88AFB8}:'Windows Script Host Object Model'.WshShell";
+    BEGIN
+      //% = alt
+      //^ = ctrl
+      //+ = shift
+
+      CREATE(WShell);
+      WShell.SendKeys('+{F12}');
+      WShell.SendKeys('+^{F7}');
+      WShell.SendKeys('%A{HOME}^{HOME}{TAB}');
+      //WShell.SendKeys('^A');
+      WShell.SendKeys('^+{END}');
+
+      WShell.SendKeys('{F11}');
+      WShell.SendKeys('{LEFT}');
+      WShell.SendKeys('{ENTER}');
+      CLEAR(WShell);
+    END;
+
+    LOCAL PROCEDURE CompileObject@1120001002(ObjectType@1120001001 : Code[3];ObjectNumber@1120001002 : Code[10]);
+    VAR
+      WShell@1120001000 : Automation "{F935DC20-1CF0-11D0-ADB9-00C04FD58A0B} 1.0:{72C24DD5-D70A-438B-8A42-98424B88AFB8}:'Windows Script Host Object Model'.WshShell";
+      i@1120001003 : Integer;
+    BEGIN
+      //% = alt
+      //^ = ctrl
+      //+ = shift
+
+      CREATE(WShell);
+      WShell.SendKeys('+{F12}');
+      WShell.SendKeys('+^{F7}');
+      CASE ObjectType OF
+        'TAB': WShell.SendKeys('%B{HOME}^{HOME}{TAB}');
+        'FOR': WShell.SendKeys('%M{HOME}^{HOME}{TAB}');
+        'REP': WShell.SendKeys('%P{HOME}^{HOME}{TAB}');
+        'DAT': WShell.SendKeys('%O{HOME}^{HOME}{TAB}');
+        'COD': WShell.SendKeys('%C{HOME}^{HOME}{TAB}');
+        'XML': WShell.SendKeys('%X{HOME}^{HOME}{TAB}');
+        'MEN': WShell.SendKeys('%S{HOME}^{HOME}{TAB}');
+      END;
+
+      FOR i := 1 TO STRLEN(ObjectNumber) DO
+        WShell.SendKeys(FORMAT(ObjectNumber[i]));
+
+      WShell.SendKeys('{ENTER}');
+      WShell.SendKeys('{F11}');
+      WShell.SendKeys('{ENTER}');
+      CLEAR(WShell);
+    END;
+
+    BEGIN
+    END.
+  }
+}
+

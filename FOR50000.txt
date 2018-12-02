@@ -1,0 +1,232 @@
+OBJECT Form 50000 Object Manager
+{
+  OBJECT-PROPERTIES
+  {
+    Date=09/06/18;
+    Time=10:44:16 PM;
+    Modified=Yes;
+    Version List=DEVTOOL;
+  }
+  PROPERTIES
+  {
+    Width=24200;
+    Height=9130;
+    InsertAllowed=No;
+    DeleteAllowed=No;
+    ModifyAllowed=No;
+    TableBoxID=1000000000;
+    SourceTable=Table2000000001;
+    OnInit=VAR
+             ObjectManagement@1120001000 : Codeunit 50000;
+             PermissionRange@1000000000 : Record 2000000044;
+             Object2@1000000001 : Record 2000000001;
+           BEGIN
+             ObjectManagerSetup.GET;
+             ObjectManagement.FilterToPermittedRange(Rec);
+           END;
+
+  }
+  CONTROLS
+  {
+    { 1000000000;TableBox;110 ;3410 ;24090;5500 ;HorzGlue=Both;
+                                                 VertGlue=Both }
+    { 1000000001;TextBox;0    ;0    ;1703 ;0    ;Editable=No;
+                                                 ParentControl=1000000000;
+                                                 InColumn=Yes;
+                                                 SourceExpr=Type }
+    { 1000000002;Label  ;0    ;0    ;0    ;0    ;ParentControl=1000000001;
+                                                 InColumnHeading=Yes }
+    { 1000000005;TextBox;0    ;0    ;1700 ;0    ;Editable=No;
+                                                 ParentControl=1000000000;
+                                                 InColumn=Yes;
+                                                 SourceExpr=ID }
+    { 1000000006;Label  ;0    ;0    ;0    ;0    ;ParentControl=1000000005;
+                                                 InColumnHeading=Yes }
+    { 1000000007;TextBox;0    ;0    ;4400 ;0    ;Editable=No;
+                                                 ParentControl=1000000000;
+                                                 InColumn=Yes;
+                                                 SourceExpr=Name }
+    { 1000000008;Label  ;0    ;0    ;0    ;0    ;ParentControl=1000000007;
+                                                 InColumnHeading=Yes }
+    { 1000000009;CheckBox;0   ;0    ;1700 ;0    ;Editable=No;
+                                                 ParentControl=1000000000;
+                                                 InColumn=Yes;
+                                                 ShowCaption=No;
+                                                 SourceExpr=Modified }
+    { 1000000010;Label  ;0    ;0    ;0    ;0    ;ParentControl=1000000009;
+                                                 InColumnHeading=Yes }
+    { 1000000011;CheckBox;0   ;0    ;1700 ;0    ;Editable=No;
+                                                 ParentControl=1000000000;
+                                                 InColumn=Yes;
+                                                 ShowCaption=No;
+                                                 SourceExpr=Compiled }
+    { 1000000012;Label  ;0    ;0    ;0    ;0    ;ParentControl=1000000011;
+                                                 InColumnHeading=Yes }
+    { 1000000013;TextBox;0    ;0    ;1700 ;0    ;Editable=No;
+                                                 ParentControl=1000000000;
+                                                 InColumn=Yes;
+                                                 SourceExpr="BLOB Reference" }
+    { 1000000014;Label  ;0    ;0    ;0    ;0    ;ParentControl=1000000013;
+                                                 InColumnHeading=Yes }
+    { 1000000015;TextBox;0    ;0    ;1700 ;0    ;Editable=No;
+                                                 ParentControl=1000000000;
+                                                 InColumn=Yes;
+                                                 SourceExpr="BLOB Size" }
+    { 1000000016;Label  ;0    ;0    ;0    ;0    ;ParentControl=1000000015;
+                                                 InColumnHeading=Yes }
+    { 1000000017;TextBox;0    ;0    ;1700 ;0    ;Editable=No;
+                                                 ParentControl=1000000000;
+                                                 InColumn=Yes;
+                                                 SourceExpr="DBM Table No." }
+    { 1000000018;Label  ;0    ;0    ;0    ;0    ;ParentControl=1000000017;
+                                                 InColumnHeading=Yes }
+    { 1000000019;TextBox;0    ;0    ;1700 ;0    ;Editable=No;
+                                                 ParentControl=1000000000;
+                                                 InColumn=Yes;
+                                                 SourceExpr=Date }
+    { 1000000020;Label  ;0    ;0    ;0    ;0    ;ParentControl=1000000019;
+                                                 InColumnHeading=Yes }
+    { 1000000021;TextBox;0    ;0    ;1700 ;0    ;Editable=No;
+                                                 ParentControl=1000000000;
+                                                 InColumn=Yes;
+                                                 SourceExpr=Time }
+    { 1000000022;Label  ;0    ;0    ;0    ;0    ;ParentControl=1000000021;
+                                                 InColumnHeading=Yes }
+    { 1000000023;TextBox;0    ;0    ;4400 ;0    ;Editable=No;
+                                                 ParentControl=1000000000;
+                                                 InColumn=Yes;
+                                                 SourceExpr="Version List" }
+    { 1000000024;Label  ;0    ;0    ;0    ;0    ;ParentControl=1000000023;
+                                                 InColumnHeading=Yes }
+    { 1000000025;TextBox;0    ;0    ;4400 ;0    ;Editable=No;
+                                                 ParentControl=1000000000;
+                                                 InColumn=Yes;
+                                                 SourceExpr=Caption }
+    { 1000000026;Label  ;0    ;0    ;0    ;0    ;ParentControl=1000000025;
+                                                 InColumnHeading=Yes }
+    { 1000000027;CheckBox;0   ;0    ;1700 ;0    ;Editable=No;
+                                                 ParentControl=1000000000;
+                                                 InColumn=Yes;
+                                                 ShowCaption=No;
+                                                 SourceExpr=Locked }
+    { 1000000028;Label  ;0    ;0    ;0    ;0    ;ParentControl=1000000027;
+                                                 InColumnHeading=Yes }
+    { 1000000029;TextBox;0    ;0    ;4400 ;0    ;Editable=No;
+                                                 ParentControl=1000000000;
+                                                 InColumn=Yes;
+                                                 SourceExpr="Locked By" }
+    { 1000000030;Label  ;0    ;0    ;0    ;0    ;ParentControl=1000000029;
+                                                 InColumnHeading=Yes }
+    { 1000000003;TextBox;0    ;0    ;4400 ;0    ;HorzGlue=Both;
+                                                 Editable=No;
+                                                 ParentControl=1000000000;
+                                                 InColumn=Yes;
+                                                 SourceExpr="Company Name" }
+    { 1000000004;Label  ;0    ;0    ;0    ;0    ;ParentControl=1000000003;
+                                                 InColumnHeading=Yes }
+    { 1000000036;Label  ;110  ;330  ;3300 ;440  ;CaptionML=ENU=Exporting folder }
+    { 1000000035;TextBox;3520 ;330  ;6820 ;440  ;SourceExpr=ObjectManagerSetup."App Folder Path";
+                                                 OnValidate=BEGIN
+                                                              WITH ObjectManagerSetup DO
+                                                                IF COPYSTR("App Folder Path",STRLEN("App Folder Path"),1) <> '\' THEN
+                                                                  "App Folder Path" += '\';
+                                                              ObjectManagerSetup.MODIFY;
+                                                            END;
+                                                             }
+    { 1000000034;CommandButton;10780;330;2200;550;
+                                                 Name=BtnExport;
+                                                 CaptionML=ENU=Export;
+                                                 OnPush=BEGIN
+                                                          ExportTxt;
+                                                        END;
+                                                         }
+    { 1000000037;CommandButton;10780;1100;2200;550;
+                                                 Name=BtnExportFOB;
+                                                 CaptionML=ENU=Export FOB;
+                                                 OnPush=BEGIN
+                                                          ExportFOB;
+                                                        END;
+                                                         }
+    { 1000000038;TextBox;3520 ;1100 ;6820 ;440  ;SourceExpr=ObjectManagerSetup."FOB Folder Path";
+                                                 OnValidate=BEGIN
+                                                              WITH ObjectManagerSetup DO
+                                                                IF COPYSTR("FOB Folder Path",STRLEN("FOB Folder Path"),1) <> '\' THEN
+                                                                  "FOB Folder Path" += '\';
+                                                              ObjectManagerSetup.MODIFY;
+                                                            END;
+                                                             }
+    { 1000000039;Label  ;110  ;1100 ;3300 ;440  ;CaptionML=ENU=Exporting folder FOB }
+    { 1120001000;CommandButton;13420;330;2200;550;
+                                                 Name=BtnImport;
+                                                 CaptionML=ENU=Import;
+                                                 OnPush=BEGIN
+                                                          ImportTxt;
+                                                        END;
+                                                         }
+    { 1120001001;CommandButton;13420;1100;2200;550;
+                                                 Name=BtnImportFOB;
+                                                 Visible=No;
+                                                 CaptionML=ENU=Import FOB }
+    { 1120001002;CommandButton;15840;330;2200;550;
+                                                 Name=BtnImportAll;
+                                                 CaptionML=ENU=Import All;
+                                                 OnPush=BEGIN
+                                                          ImportAllTxt;
+                                                        END;
+                                                         }
+    { 1000000031;Label  ;110  ;1760 ;3300 ;440  ;CaptionML=ENU=Iconv File Path }
+    { 1000000032;Label  ;110  ;2420 ;3300 ;440  ;CaptionML=ENU=Compilation Strategy }
+    { 1000000033;TextBox;3520 ;1760 ;6820 ;440  ;SourceExpr=ObjectManagerSetup."Iconv File Path";
+                                                 OnValidate=BEGIN
+                                                              ObjectManagerSetup.MODIFY;
+                                                            END;
+                                                             }
+    { 1000000040;TextBox;3520 ;2420 ;6820 ;440  ;OptionString=Non,Imported,All;
+                                                 SourceExpr=ObjectManagerSetup."Compilation Strategy";
+                                                 OnValidate=BEGIN
+                                                              ObjectManagerSetup.MODIFY;
+                                                            END;
+                                                             }
+  }
+  CODE
+  {
+    VAR
+      ObjectManagerSetup@1000000000 : Record 50000;
+
+    LOCAL PROCEDURE ExportTxt@1120001001();
+    VAR
+      ObjectManagement@1120001007 : Codeunit 50000;
+    BEGIN
+      ObjectManagement.ExportTxtByFilter(Rec);
+      MESSAGE('Exported as .txt');
+    END;
+
+    LOCAL PROCEDURE ExportFOB@1120001007();
+    VAR
+      ObjectManagement@1120001001 : Codeunit 50000;
+    BEGIN
+      ObjectManagement.ExportFobByFilter(Rec);
+      MESSAGE('Exported as .FOB');
+    END;
+
+    LOCAL PROCEDURE ImportTxt@1120001000();
+    VAR
+      ObjectManagement@1120001007 : Codeunit 50000;
+    BEGIN
+      ObjectManagement.ImportTxtByFilter(Rec);
+      MESSAGE('Imported');
+    END;
+
+    LOCAL PROCEDURE ImportAllTxt@1120001004();
+    VAR
+      ObjectManagement@1120001000 : Codeunit 50000;
+    BEGIN
+      ObjectManagement.ImportAllTxt;
+      MESSAGE('Imported');
+    END;
+
+    BEGIN
+    END.
+  }
+}
+
